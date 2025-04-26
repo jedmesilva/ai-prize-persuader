@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import PaymentPrompt from './PaymentPrompt';
 
 interface Message {
   id: number;
   text: string;
-  sender: 'user' | 'ai';
+  sender: 'user' | 'ai' | 'payment';
   timestamp: Date;
 }
 
@@ -17,7 +18,7 @@ interface ChatInterfaceProps {
 
 const initialMessage: Message = {
   id: 1,
-  text: "Por que você acha que merece ganhar o prêmio?",
+  text: "540 pessoas fracassaram com argumentos chulos, quer tentar algo melhor que elas?",
   sender: 'ai',
   timestamp: new Date()
 };
@@ -33,15 +34,48 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const renderMessage = (message: Message) => {
+    if (message.sender === 'payment') {
+      return <PaymentPrompt onPaymentSuccess={() => {}} />;
+    }
+
+    return (
+      <div 
+        className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+      >
+        <div 
+          className={`max-w-[80%] rounded-lg px-4 py-2 ${
+            message.sender === 'user' 
+              ? 'bg-theme-purple text-white' 
+              : 'bg-gray-800 text-theme-light-purple border border-theme-purple'
+          }`}
+        >
+          <p>{message.text}</p>
+          <div className="text-xs opacity-70 mt-1">
+            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const handlePaymentSuccess = () => {
+    setMessages(prevMessages => [...prevMessages.slice(0, -1)]);
+    onAiResponse('Pagamento concluído');
+  };
+
   const handleSendMessage = () => {
     if (inputValue.trim() === '') return;
     
     if (!isUnlocked) {
-      toast({
-        title: "Chat bloqueado!",
-        description: "Faça o pagamento para desbloquear o chat.",
-        variant: "destructive"
-      });
+      const paymentMessage: Message = {
+        id: messages.length + 1,
+        text: '',
+        sender: 'payment',
+        timestamp: new Date()
+      };
+      
+      setMessages(prevMessages => [...prevMessages, paymentMessage]);
       return;
     }
 
@@ -97,25 +131,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
     <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4">
       <div className="flex flex-col h-[400px] md:h-[500px] bg-theme-dark-purple border border-theme-purple rounded-lg shadow-lg overflow-hidden">
         <div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-theme-purple scrollbar-track-theme-dark-purple">
-          {messages.map((message) => (
-            <div 
-              key={message.id} 
-              className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div 
-                className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                  message.sender === 'user' 
-                    ? 'bg-theme-purple text-white' 
-                    : 'bg-gray-800 text-theme-light-purple border border-theme-purple'
-                }`}
-              >
-                <p>{message.text}</p>
-                <div className="text-xs opacity-70 mt-1">
-                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </div>
-              </div>
-            </div>
-          ))}
+          {messages.map(renderMessage)}
           
           {isTyping && (
             <div className="flex justify-start mb-4">
