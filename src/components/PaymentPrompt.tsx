@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { DollarSign } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface PaymentPromptProps {
   onPaymentSuccess: () => void;
@@ -19,6 +19,7 @@ const PaymentPrompt: React.FC<PaymentPromptProps> = ({ onPaymentSuccess }) => {
     toast({
       title: "Processando pagamento...",
       description: "Por favor, aguarde...",
+      variant: "default", // Use default variant instead of non-existent "success"
     });
     
     // Simulate payment success after 1.5 seconds
@@ -27,7 +28,7 @@ const PaymentPrompt: React.FC<PaymentPromptProps> = ({ onPaymentSuccess }) => {
       toast({
         title: "Pagamento aprovado!",
         description: "Agora você pode tentar me convencer!",
-        variant: "success",
+        variant: "default", // Use default variant
       });
       onPaymentSuccess();
     }, 1500);
@@ -49,11 +50,11 @@ const PaymentPrompt: React.FC<PaymentPromptProps> = ({ onPaymentSuccess }) => {
           className="bg-theme-vivid-purple hover:bg-theme-purple text-white font-bold px-8 py-6 rounded-lg text-lg w-full flex items-center justify-center"
         >
           <DollarSign className="h-6 w-6 mr-2" />
-          {isProcessing ? "Processando..." : "Pagar $1 e Tentar Convencer"}
+          {isProcessing ? "Processando..." : "$1 Convencer"}
         </Button>
         
         <p className="text-sm text-theme-soft-purple mt-4 opacity-75">
-          Pague apenas $1 para desbloquear uma chance de ganhar todo o prêmio acumulado!
+          Pague $1 para desbloquear uma chance de ganhar!
         </p>
       </div>
     </div>
@@ -61,3 +62,4 @@ const PaymentPrompt: React.FC<PaymentPromptProps> = ({ onPaymentSuccess }) => {
 };
 
 export default PaymentPrompt;
+
