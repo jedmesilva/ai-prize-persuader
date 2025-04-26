@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import AiAvatar from '@/components/AiAvatar';
 import PrizeDisplay from '@/components/PrizeDisplay';
@@ -25,7 +24,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen container mx-auto py-8 px-4">
+    <div className="min-h-screen container mx-auto py-8 px-4 pb-[500px]">
       <header className="mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-center text-gradient mb-2">
           Convença a IA

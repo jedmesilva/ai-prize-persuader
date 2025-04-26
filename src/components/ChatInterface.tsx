@@ -1,8 +1,7 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   id: number;
@@ -30,7 +29,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -47,7 +45,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
       return;
     }
 
-    // Add user message
     const userMessage: Message = {
       id: messages.length + 1,
       text: inputValue,
@@ -59,7 +56,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI thinking and respond
     setTimeout(() => {
       const aiResponse = getAiResponse(inputValue);
       
@@ -98,63 +94,63 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
   };
 
   return (
-    <div className="flex flex-col h-[400px] md:h-[500px] bg-theme-dark-purple border border-theme-purple rounded-lg shadow-lg overflow-hidden">
-      {/* Chat messages area */}
-      <div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-theme-purple scrollbar-track-theme-dark-purple">
-        {messages.map((message) => (
-          <div 
-            key={message.id} 
-            className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+    <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4">
+      <div className="flex flex-col h-[400px] md:h-[500px] bg-theme-dark-purple border border-theme-purple rounded-lg shadow-lg overflow-hidden">
+        <div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-theme-purple scrollbar-track-theme-dark-purple">
+          {messages.map((message) => (
             <div 
-              className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                message.sender === 'user' 
-                  ? 'bg-theme-purple text-white' 
-                  : 'bg-gray-800 text-theme-light-purple border border-theme-purple'
-              }`}
+              key={message.id} 
+              className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <p>{message.text}</p>
-              <div className="text-xs opacity-70 mt-1">
-                {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              <div 
+                className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                  message.sender === 'user' 
+                    ? 'bg-theme-purple text-white' 
+                    : 'bg-gray-800 text-theme-light-purple border border-theme-purple'
+                }`}
+              >
+                <p>{message.text}</p>
+                <div className="text-xs opacity-70 mt-1">
+                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        
-        {isTyping && (
-          <div className="flex justify-start mb-4">
-            <div className="bg-gray-800 text-white rounded-lg px-4 py-2 border border-theme-purple">
-              <div className="flex space-x-2">
-                <div className="w-2 h-2 bg-theme-purple rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-theme-purple rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-2 h-2 bg-theme-purple rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+          ))}
+          
+          {isTyping && (
+            <div className="flex justify-start mb-4">
+              <div className="bg-gray-800 text-white rounded-lg px-4 py-2 border border-theme-purple">
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 bg-theme-purple rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-theme-purple rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-theme-purple rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+          
+          <div ref={messagesEndRef} />
+        </div>
         
-        <div ref={messagesEndRef} />
-      </div>
-      
-      {/* Message input area */}
-      <div className="border-t border-theme-purple p-4">
-        <div className="flex items-center">
-          <textarea
-            className="flex-1 bg-gray-800 border border-theme-purple rounded-lg px-4 py-2 text-white resize-none focus:outline-none focus:ring-2 focus:ring-theme-purple"
-            placeholder={isUnlocked ? "Digite sua mensagem..." : "Chat bloqueado - Faça o pagamento para desbloquear"}
-            rows={2}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyPress}
-            disabled={!isUnlocked}
-          />
-          <Button 
-            onClick={handleSendMessage}
-            disabled={!isUnlocked || inputValue.trim() === ''}
-            className="ml-2 bg-theme-purple hover:bg-theme-vivid-purple text-white rounded-full p-2"
-          >
-            <Send className="h-5 w-5" />
-          </Button>
+        <div className="border-t border-theme-purple p-4">
+          <div className="flex items-center">
+            <textarea
+              className="flex-1 bg-gray-800 border border-theme-purple rounded-lg px-4 py-2 text-white resize-none focus:outline-none focus:ring-2 focus:ring-theme-purple"
+              placeholder={isUnlocked ? "Digite sua mensagem..." : "Chat bloqueado - Faça o pagamento para desbloquear"}
+              rows={2}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyPress}
+              disabled={!isUnlocked}
+            />
+            <Button 
+              onClick={handleSendMessage}
+              disabled={!isUnlocked || inputValue.trim() === ''}
+              className="ml-2 bg-theme-purple hover:bg-theme-vivid-purple text-white rounded-full p-2"
+            >
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
