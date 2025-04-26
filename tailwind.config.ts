@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				theme: {
+					purple: '#9b87f5',
+					'dark-purple': '#1A1F2C',
+					'light-purple': '#D6BCFA',
+					'soft-purple': '#E5DEFF',
+					'vivid-purple': '#8B5CF6',
+					blue: '#1EAEDB',
+					red: '#ea384c',
 				}
 			},
 			borderRadius: {
@@ -84,11 +94,24 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				pulse: {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' },
+				},
+				shimmer: {
+					'0%': { backgroundPosition: '-200% 0' },
+					'100%': { backgroundPosition: '200% 0' },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				pulse: 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				shimmer: 'shimmer 2s linear infinite',
+			},
+			backgroundImage: {
+				'gradient-shimmer': 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%)',
 			}
 		}
 	},
