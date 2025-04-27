@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send } from 'lucide-react';
+import { Send, ArrowUp } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import PaymentPrompt from './PaymentPrompt';
@@ -153,7 +153,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
                   disabled={inputValue.trim() === ''}
                   className="ml-2 bg-theme-purple hover:bg-theme-vivid-purple text-white rounded-full p-2"
                 >
-                  <Send className="h-5 w-5" />
+                  <ArrowUp className="h-5 w-5" />
                 </Button>
               </div>
             </div>
