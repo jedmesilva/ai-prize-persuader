@@ -1,5 +1,6 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import PaymentPrompt from './PaymentPrompt';
@@ -139,9 +140,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
             </div>
             
             <div className="border-t border-theme-purple p-4">
-              <div className="flex items-center">
+              <div className="relative flex items-center">
                 <textarea
-                  className="flex-1 bg-gray-800 border border-theme-purple rounded-lg px-4 py-2 text-white resize-none focus:outline-none focus:ring-2 focus:ring-theme-purple"
+                  className="flex-1 bg-gray-800 border border-theme-purple rounded-lg px-4 py-2 pr-12 text-white resize-none focus:outline-none focus:ring-2 focus:ring-theme-purple"
                   placeholder="Digite sua mensagem..."
                   rows={2}
                   value={inputValue}
@@ -151,7 +152,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
                 <Button 
                   onClick={handleSendMessage}
                   disabled={inputValue.trim() === ''}
-                  className="ml-2 bg-theme-purple hover:bg-theme-vivid-purple text-white rounded-full p-2"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-theme-purple hover:bg-theme-vivid-purple text-white rounded-full p-2"
                 >
                   <ArrowUp className="h-5 w-5" />
                 </Button>
@@ -165,3 +166,4 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
 };
 
 export default ChatInterface;
+
