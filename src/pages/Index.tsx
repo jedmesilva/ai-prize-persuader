@@ -1,8 +1,8 @@
+
 import React, { useState } from 'react';
 import AiAvatar from '@/components/AiAvatar';
 import PrizeDisplay from '@/components/PrizeDisplay';
 import ChatInterface from '@/components/ChatInterface';
-import PaymentPrompt from '@/components/PaymentPrompt';
 import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
@@ -20,6 +20,11 @@ const Index = () => {
     // If the response doesn't indicate winning, increment failed attempts
     if (!response.toLowerCase().includes("parabéns") && !response.toLowerCase().includes("venceu")) {
       setFailedAttempts(prevAttempts => prevAttempts + 1);
+    }
+    
+    // Se a resposta for sobre pagamento, processa o pagamento
+    if (response.toLowerCase().includes("pagamento concluído")) {
+      handlePaymentSuccess();
     }
   };
 
@@ -45,10 +50,6 @@ const Index = () => {
           isUnlocked={isUnlocked} 
           onAiResponse={handleAiResponse} 
         />
-        
-        {!isUnlocked && (
-          <PaymentPrompt onPaymentSuccess={handlePaymentSuccess} />
-        )}
       </div>
       
       <footer className="mt-16 text-center text-sm text-gray-500">

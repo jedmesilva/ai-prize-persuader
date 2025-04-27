@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
+  // Adicionar o banner como uma mensagem após a inicialização se não estiver desbloqueado
+  useEffect(() => {
+    if (!isUnlocked && !messages.some(m => m.sender === 'payment')) {
+      const paymentMessage: Message = {
+        id: messages.length + 1,
+        text: '',
+        sender: 'payment',
+        timestamp: new Date()
+      };
+      setMessages(prevMessages => [...prevMessages, paymentMessage]);
+    }
+  }, [isUnlocked, messages]);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -37,13 +51,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
   const renderMessage = (message: Message) => {
     if (message.sender === 'payment') {
       return (
-        <div key={message.id} className="mb-4 flex justify-center">
-          <PaymentPrompt 
-            onPaymentSuccess={() => {
-              setMessages(prevMessages => prevMessages.filter(m => m.sender !== 'payment'));
-              onAiResponse('Pagamento concluído');
-            }} 
-          />
+        <div key={message.id} className="mb-4 w-full">
+          <div className="flex justify-center">
+            <PaymentPrompt 
+              onPaymentSuccess={() => {
+                setMessages(prevMessages => prevMessages.filter(m => m.sender !== 'payment'));
+                onAiResponse('Pagamento concluído');
+              }} 
+            />
+          </div>
         </div>
       );
     }

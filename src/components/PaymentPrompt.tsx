@@ -35,31 +35,28 @@ const PaymentPrompt: React.FC<PaymentPromptProps> = ({ onPaymentSuccess }) => {
   };
   
   return (
-    <div className="absolute inset-x-0 bottom-0 top-1/3 flex flex-col items-center justify-center bg-gradient-to-t from-theme-dark-purple to-transparent p-4 backdrop-blur-sm rounded-lg">
-      <div className="bg-theme-dark-purple border-2 border-theme-purple rounded-lg p-6 text-center max-w-md w-full shadow-xl">
-        <h3 className="text-2xl font-bold text-theme-light-purple mb-2">
-          540 pessoas fracassaram com argumentos chulos
-        </h3>
-        <p className="text-theme-soft-purple mb-6">
-          Quer tentar algo melhor que elas?
-        </p>
-        
-        <Button
-          onClick={handlePayment}
-          disabled={isProcessing}
-          className="bg-theme-vivid-purple hover:bg-theme-purple text-white font-bold px-8 py-6 rounded-lg text-lg w-full flex items-center justify-center"
-        >
-          <DollarSign className="h-6 w-6 mr-2" />
-          {isProcessing ? "Processando..." : "$1 Convencer"}
-        </Button>
-        
-        <p className="text-sm text-theme-soft-purple mt-4 opacity-75">
-          Pague $1 para desbloquear uma chance de ganhar!
-        </p>
-      </div>
+    <div className="bg-theme-dark-purple border-2 border-theme-purple rounded-lg p-6 text-center max-w-md w-full shadow-xl my-2">
+      <h3 className="text-2xl font-bold text-theme-light-purple mb-2">
+        540 pessoas fracassaram com argumentos chulos
+      </h3>
+      <p className="text-theme-soft-purple mb-6">
+        Quer tentar algo melhor que elas?
+      </p>
+      
+      <Button
+        onClick={handlePayment}
+        disabled={isProcessing}
+        className="bg-theme-vivid-purple hover:bg-theme-purple text-white font-bold px-8 py-6 rounded-lg text-lg w-full flex items-center justify-center"
+      >
+        <DollarSign className="h-6 w-6 mr-2" />
+        {isProcessing ? "Processando..." : "$1 Convencer"}
+      </Button>
+      
+      <p className="text-sm text-theme-soft-purple mt-4 opacity-75">
+        Pague $1 para desbloquear uma chance de ganhar!
+      </p>
     </div>
   );
 };
 
 export default PaymentPrompt;
-
