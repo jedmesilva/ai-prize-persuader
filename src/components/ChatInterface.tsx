@@ -36,11 +36,21 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
 
   const renderMessage = (message: Message) => {
     if (message.sender === 'payment') {
-      return <PaymentPrompt onPaymentSuccess={() => {}} />;
+      return (
+        <div key={message.id} className="mb-4 flex justify-center">
+          <PaymentPrompt 
+            onPaymentSuccess={() => {
+              setMessages(prevMessages => prevMessages.filter(m => m.sender !== 'payment'));
+              onAiResponse('Pagamento concluído');
+            }} 
+          />
+        </div>
+      );
     }
 
     return (
       <div 
+        key={message.id}
         className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
       >
         <div 
@@ -57,11 +67,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isUnlocked, onAiResponse 
         </div>
       </div>
     );
-  };
-
-  const handlePaymentSuccess = () => {
-    setMessages(prevMessages => [...prevMessages.slice(0, -1)]);
-    onAiResponse('Pagamento concluído');
   };
 
   const handleSendMessage = () => {
